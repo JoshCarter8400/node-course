@@ -1,39 +1,23 @@
 const request = require('request');
+const geocode = require('./utils/geocode');
+const forecast = require('./utils/forecast');
 
-const url =
-  'http://api.weatherstack.com/current?access_key=770faf89cbbb8777bbb3a1b29a21f123&query=37.8267,-122.4233&units=f';
+// geocode('Key West', (error, data) => {
+//   console.log('Error', error);
+//   console.log('Data', data);
+// });
 
-request({ url: url, json: true }, (error, response) => {
-  if (error) {
-    console.log('Unable to connect');
-  } else if (response.body.error) {
-    console.log('Unable to find location');
-  } else {
-    console.log(
-      response.body.current.weather_descriptions[0] +
-        '. It is currently ' +
-        response.body.current.temperature +
-        ' and it feel like ' +
-        response.body.current.feelslike +
-        ' out '
-    );
-  }
-});
+//
+// Goal: Create a reusable function for getting the forecast
+//
+// 1. Setup the "forecast" function in utils/forecast.js
+// 2. Require the function in app.js and call it as shown below
+// 3. The forecast function should have three potential calls to callback:
+//    - Low level error, pass string for error
+//    - Coordinate error, pass string for error
+//    - Success, pass forecast string for data (same format as from before)
 
-// Geocoding
-// Address -> Lat/Long -> Weather
-
-const geocodeURL =
-  'https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoiYW5kcmV3bWVhZDEiLCJhIjoiY2pvOG8ybW90MDFhazNxcnJ4OTYydzJlOSJ9.njY7HvaalLEVhEOIghPTlw&limit=1';
-
-request({ url: geocodeURL, json: true }, (error, response) => {
-  if (error) {
-    console.log('Unable to connect');
-  } else if (response.body.features.length === 0) {
-    console.log('Unable to find location please search another one');
-  } else {
-    const latitude = response.body.features[0].center[1];
-    const longitude = response.body.features[0].center[0];
-    console.log(latitude, longitude);
-  }
+forecast(-75.7088, 44.1545, (error, data) => {
+  console.log('Error', error);
+  console.log('Data', data);
 });
